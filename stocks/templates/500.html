@@ -1,0 +1,26 @@
+{% extends "stocks/base.html" %}
+
+{% block head_title %}Server Error{% endblock %}
+
+{% block maincontent %}
+<div class="min-h-[70vh] flex items-center justify-center">
+    <div class="glass-panel p-10 rounded-3xl max-w-lg text-center">
+        <h1 class="text-6xl font-bold text-red-500 mb-4">500</h1>
+
+        <p class="text-xl text-slate-800 font-semibold mb-2">
+            Something went wrong
+        </p>
+
+        <p class="text-slate-500 mb-6">
+            Our servers hit a snag. Please try again later.
+        </p>
+
+        <a href="{% url 'index' %}"
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                  bg-slate-800 text-white font-medium
+                  hover:bg-slate-900 transition">
+            ← Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

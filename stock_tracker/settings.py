@@ -26,7 +26,8 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
  
-DEBUG = bool(os.environ.get("DEBUG", default=0))
+DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG= False
  
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
 
