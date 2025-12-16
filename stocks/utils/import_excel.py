@@ -1,5 +1,7 @@
 import pandas as pd
 from django.db import transaction
+from datetime import datetime, date
+
 from stocks.models import (
     Company,
     Metric,
@@ -7,11 +9,10 @@ from stocks.models import (
     TimePeriod,
     FinancialValue,
 )
-from datetime import datetime, date
 
-# =====================================================
-# Helpers
-# =====================================================
+from stocks.utils.gen_fundamentals import generate_company_fundamentals
+
+
 
 def normalize_code(name: str) -> str:
     return (
@@ -26,25 +27,11 @@ def normalize_code(name: str) -> str:
     )
 
 
-
 def is_valid_period(label) -> bool:
-    """
-    Accept only real datetime/date objects.
-    """
     return isinstance(label, (datetime, date))
 
 
-def parse_year(two_digit_year: str) -> int:
-    y = int(two_digit_year)
-    return 2000 + y if y < 50 else 1900 + y
-
-
 def get_or_create_time_period(dt, report_type: str) -> TimePeriod:
-    """
-    dt: datetime.date or datetime.datetime
-    report_type: 'annual' or 'quarterly'
-    """
-
     year = dt.year
     month = dt.month
 
@@ -54,13 +41,7 @@ def get_or_create_time_period(dt, report_type: str) -> TimePeriod:
 
     elif report_type == "quarterly":
         period_type = "quarterly"
-
-        quarter_map = {
-            6: 1,   # Jun
-            9: 2,   # Sep
-            12: 3,  # Dec
-            3: 4,   # Mar
-        }
+        quarter_map = {6: 1, 9: 2, 12: 3, 3: 4}
 
         if month not in quarter_map:
             raise ValueError(f"Invalid quarter month: {month}")
@@ -71,7 +52,7 @@ def get_or_create_time_period(dt, report_type: str) -> TimePeriod:
         raise ValueError("Invalid report_type")
 
     obj, _ = TimePeriod.objects.get_or_create(
-        year=year-1 if quarter==4 or period_type=="annual" else year,
+        year=year - 1 if quarter == 4 or period_type == "annual" else year,
         quarter=quarter,
         period_type=period_type,
     )
@@ -87,14 +68,13 @@ def get_or_create_metric(name: str, category_code: str) -> Metric:
         defaults={
             "name": name,
             "category": category,
-            "is_derived": False,
         },
     )
     return metric
 
 
 # =====================================================
-# Section configuration (SINGLE SOURCE OF TRUTH)
+# Section configuration
 # =====================================================
 
 SECTION_MAP = {
@@ -123,11 +103,8 @@ def import_data_sheet(
     company_ticker: str,
 ):
     """
-    Imports financial data ONLY from the 'Data Sheet'.
-
-    Ignores:
-    - Trailing / Best Case / Worst Case
-    - Derived / Ratios / Trends / Price
+    Imports RAW financial data from the Excel Data Sheet
+    and regenerates CompanyFundamental after import.
     """
 
     # ---------------------------------------------
@@ -146,7 +123,7 @@ def import_data_sheet(
     )
 
     # ---------------------------------------------
-    # Read Data Sheet (RAW)
+    # Read Excel
     # ---------------------------------------------
     df = pd.read_excel(
         file_path,
@@ -167,36 +144,22 @@ def import_data_sheet(
 
         cell_upper = first_cell.upper()
 
-        # -----------------------------------------
-        # Ignore blocks
-        # -----------------------------------------
         if cell_upper in IGNORED_SECTIONS:
             current_section = None
             continue
 
-        # -----------------------------------------
-        # Detect section
-        # -----------------------------------------
         if cell_upper in SECTION_MAP:
             current_section = SECTION_MAP[cell_upper]
             current_periods = []
             continue
 
-        # -----------------------------------------
-        # Detect Report Date row
-        # -----------------------------------------
         if cell_upper == "REPORT DATE" and current_section:
             current_periods = df.iloc[i, 1:].tolist()
-            print(current_periods)
             continue
 
-        # -----------------------------------------
-        # Metric rows
-        # -----------------------------------------
         if current_section and current_periods:
             metric_name = first_cell
 
-            # Skip totals / blanks
             if metric_name.upper() == "TOTAL":
                 continue
 
@@ -225,3 +188,4 @@ def import_data_sheet(
                     time_period=time_period,
                     defaults={"value": value},
                 )
+    generate_company_fundamentals(company)

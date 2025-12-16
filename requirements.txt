@@ -24,3 +24,5 @@ pytz==2025.2
 six==1.17.0
 sqlparse==0.5.4
 tablib==3.9.0
+psycopg[binary]
+yfinance==0.2.66

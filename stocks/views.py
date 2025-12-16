@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Company, FinancialValue, TimePeriod, Metric
-from .forms import CompanyForm
+from .models import Company, FinancialValue, TimePeriod, Metric,CompanyFundamental
 from django.db.models import Q
+from stocks.utils.marketsnapshot import get_live_snapshot
 
 # Create your views here.
 def index(request):
@@ -9,6 +9,7 @@ def index(request):
 
 def get_stock(request,ticker):
     company = get_object_or_404(Company, ticker__iexact=ticker)
+    fundamentals=get_object_or_404(CompanyFundamental,company=company)
     
     def get_table_data(period_type, category_code, limit=12):
         # Get periods for this company and period type
@@ -52,9 +53,11 @@ def get_stock(request,ticker):
     pnl_periods, pnl_data = get_table_data('annual', 'PNL')
     bs_periods, bs_data = get_table_data('annual', 'BS')
     cf_periods, cf_data = get_table_data('annual', 'CF')
-    
+    snapshot = get_live_snapshot(company.ticker)
     context = {
         'company': company,
+        'snapshot':snapshot,
+        'fundamentals':fundamentals,
         'quarterly_periods': quarterly_periods,
         'quarterly_data': quarterly_data,
         'pnl_periods': pnl_periods,

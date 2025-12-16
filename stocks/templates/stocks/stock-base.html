@@ -1,5 +1,6 @@
 {% extends "stocks/base.html" %}
 {% load humanize %}
+{% load finance_filters %}
 
 {% block container_class %}max-w-screen-2xl{% endblock %}
 
@@ -17,7 +18,7 @@
                     {{ company.name }}
                 </h1>
 
-                <div class="text-slate-500 text-sm flex gap-6">
+                <div class="text-slate-500 text-sm flex gap-6 items-center">
                     <span>
                         Ticker:
                         <span class="text-slate-800 font-medium">
@@ -36,19 +37,90 @@
                             {{ company.get_exchange_display }}
                         </span>
                     </span>
+                    
+                    
                 </div>
             </div>
-
-            <div class="text-right">
+            <div class="text-right mr-10">
                 <div class="text-3xl font-bold text-amber-600">
-                    ₹{{ current_price|default:"--" }}
+                    ₹{{ snapshot.price|default:"--" }}
                 </div>
                 <div class="text-sm text-amber-500">
                     Current Price
                 </div>
             </div>
         </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 text-sm pt-2">
+        <div>
+            <div class="text-slate-500">Revenue</div>
+            <div class="font-semibold text-slate-800">
+                ₹{{ fundamentals.revenue|default:"--"|floatformat:0 }}
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">Op. Margin</div>
+            <div class="font-semibold text-slate-800">
+                {{ fundamentals.operating_margin|default:"--"|floatformat:2 }}%
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">Net Margin</div>
+            <div class="font-semibold text-slate-800">
+                {{ fundamentals.net_margin|default:"--"|floatformat:2 }}%
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">ROE</div>
+            <div class="font-semibold text-slate-800">
+                {{ fundamentals.roe|default:"--"|floatformat:2 }}%
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">ROCE</div>
+            <div class="font-semibold text-slate-800">
+                {{ fundamentals.roce|default:"--"|floatformat:2 }}%
+            </div>
+        </div>
+
+        <div>
+            <div class="text-slate-500">Debt / Equity</div>
+            <div class="font-semibold text-slate-800">
+                {{ fundamentals.debt_to_equity|default:"--"|floatformat:2 }}
+            </div>
+        </div>
+        <div>
+            <div class="text-slate-500">Market Cap.</div>
+            <div class="font-semibold text-slate-800">
+                {{ snapshot.market_cap | to_crore |default:"--"| floatformat:2 }} Crs.
+            </div>
+        </div>
+        <div>
+            <div class="text-slate-500">P/E</div>
+            <div class="font-semibold text-slate-800">
+                {{ snapshot.pe |default:"--"| floatformat:2 }} 
+            </div>
+        </div>
+        <div>
+            <div class="text-slate-500">P/B</div>
+            <div class="font-semibold text-slate-800">
+                {{ snapshot.pb |default:"--"| floatformat:2 }} 
+            </div>
+        </div>
+        <div>
+            <div class="text-slate-500">52W High/Low</div>
+            <div class="font-semibold text-slate-800">
+                {{ snapshot.high_52w |default:"--"| floatformat:0 }} / {{ snapshot.low_52w |default:"--"| floatformat:0 }}
+            </div>
+        </div>
+
+
     </div>
+</div>
+
 
     {% include "stocks/partials/financial_table.html" with title="Quarterly Results" table_data=quarterly_data periods=quarterly_periods %}
 

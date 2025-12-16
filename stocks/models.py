@@ -11,10 +11,9 @@ class Company(models.Model):
     )
 
     name = models.CharField(_("Name"), max_length=50, unique=True)
-    ticker = models.CharField(_("Ticker"), max_length=50, unique=True)
+    ticker = models.CharField(_("Ticker"), max_length=30, unique=True)
     exchange = models.CharField(_("Exchange"), max_length=3, choices=EXCHANGE_CHOICES)
     sector = models.CharField(_("Sector"), max_length=50)
-    industry = models.CharField(_("Industry"), max_length=50)
     listing_date = models.DateField(_("Listing Date"))
     is_active = models.BooleanField(_("Active?"), default=True)
 
@@ -59,7 +58,6 @@ class MetricCategory(models.Model):
         ("PNL", "Profit & Loss"),
         ("BS", "Balance Sheet"),
         ("CF", "Cash Flow"),
-        ("RATIO", "Financial Ratios"),
     )
 
     code = models.CharField(
@@ -88,7 +86,6 @@ class Metric(models.Model):
         on_delete=models.PROTECT,
         related_name="metrics"
     )
-    is_derived = models.BooleanField(_("Is Derived Metric?"), default=False)
     formula = models.TextField(_("Formula"), null=True, blank=True)
 
     class Meta:
@@ -142,3 +139,59 @@ class FinancialValue(models.Model):
     def get_absolute_url(self):
         return reverse("financialvalue_detail", kwargs={"pk": self.pk})
 
+
+class CompanyFundamental(models.Model):
+
+    company = models.OneToOneField(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="fundamentals"
+    )
+
+    # Latest annual numbers
+    revenue = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+
+    # Margins (%)
+    operating_margin = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    net_margin = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    # Returns (%)
+    roce = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    roe = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    # Leverage
+    debt_to_equity = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    # Growth (% CAGR)
+    sales_cagr_5y = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    profit_cagr_5y = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Company Fundamental")
+        verbose_name_plural = _("Company Fundamentals")
+
+    def __str__(self):
+        return f"{self.company.name} Fundamentals"
+
+class CompanyMarketSnapshot(models.Model):
+
+    company = models.OneToOneField(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="market"
+    )
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    market_cap = models.DecimalField(max_digits=20, decimal_places=2)
+
+    # Price-derived ratios
+    pe = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    pb = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    dividend_yield = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.company.name} Market Snapshot"

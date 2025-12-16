@@ -4,13 +4,23 @@ from .models import FinancialValue, Metric, MetricCategory
 from allauth.account.forms import SignupForm
 from .models import Company
 
-class CompanyForm(forms.ModelForm):
-    excel_file = forms.FileField(required=False, label="Upload Excel Data Sheet")
+# class CompanyForm(forms.ModelForm):
+#     excel_file = forms.FileField(required=False, label="Upload Excel Data Sheet")
+#     class Meta:
+#         model = Company
+#         fields = ("name","ticker","exchange","sector","listing_date","is_active")
+
+
+
+class CompanyAdminForm(forms.ModelForm):
+    excel_file = forms.FileField(
+        required=False,
+        help_text="Upload Excel file to import financial data"
+    )
+
     class Meta:
         model = Company
-        fields = ("name","ticker","exchange","sector","industry","listing_date","is_active")
-
-
+        fields = "__all__"
 
 
 class FinancialValueAdminForm(forms.ModelForm):

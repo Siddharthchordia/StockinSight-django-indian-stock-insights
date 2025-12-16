@@ -43,3 +43,4 @@ ENV/
 
 # Excel files (assuming these are data/test files)
 *.xlsx
+db1.sqlite3
