@@ -1,0 +1,33 @@
+name: StockinSight Tests
+on:
+    push:
+        branches: [ main, master ]
+    pull_request:
+        branches: [ main, master ]
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_DB: stockinsight_db
+                    POSTGRES_USER: stockinsight_user
+                    POSTGRES_PASSWORD: stockinsight_password
+                ports:
+                    - 5432:5432
+        env:
+            DJANGO_SETTINGS_MODULE: stock_tracker.settings
+            DATABASE_URL: postgres://stockinsight_user:stockinsight_password@localhost:5432/stockinsight_db
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                    python-version: "3.12"
+            - run: |
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+            - run: |
+                pytest
+
+

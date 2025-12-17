@@ -76,11 +76,6 @@ class TestRobustness:
         
         # Check for metric name
         assert metric.name in content
-        
-        # Check for revenue (5000 -> 5,000)
-        # Using string search might be brittle, but checking for 'Sales' (metric name) 
-        # ensures the table for PNL is being rendered.
-        # Also check for fundamentals revenue if possible
         if company_fundamental.revenue:
             # Simple check for 5,000
             assert "5,000" in content or "5000" in content
