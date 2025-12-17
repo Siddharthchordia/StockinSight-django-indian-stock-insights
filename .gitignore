@@ -45,4 +45,3 @@ ENV/
 *.xlsx
 db1.sqlite3
 
-test_excel_import.py
