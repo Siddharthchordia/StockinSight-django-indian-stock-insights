@@ -1,6 +1,6 @@
 import yfinance as yf
 from stocks.models import Company, CompanyMarketSnapshot, CompanyHistory
-from stocks.utils.import_excel import get_history
+
 
 def get_live_snapshot(company: Company):
     try:
@@ -9,7 +9,7 @@ def get_live_snapshot(company: Company):
         CompanyMarketSnapshot.objects.update_or_create( 
             company=company,
             defaults={
-            "price": info.get("currentPrice"),
+            "price": price,
             "market_cap": info.get("marketCap"),
             "pe": info.get("trailingPE"),
             "pb": info.get("priceToBook"),
@@ -18,8 +18,3 @@ def get_live_snapshot(company: Company):
         })
     except Exception as e:
         print(f"Failed for {company.ticker}: {e}")
-
-def regular_job():
-    for company in Company.objects.filter(is_active=True):
-        get_history(company)
-        get_live_snapshot(company)

@@ -17,6 +17,7 @@ from .models import (
 )
 from .forms import FinancialValueAdminForm, CompanyAdminForm
 from stocks.utils.import_excel import import_data_sheet
+from stocks.utils.marketsnapshot import get_live_snapshot
 
 
 admin.site.register(CompanyHistory)
@@ -30,8 +31,9 @@ class CompanyAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-
+        get_live_snapshot(obj)
         excel_file = form.cleaned_data.get("excel_file")
+
 
         if excel_file:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:

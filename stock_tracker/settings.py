@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "stocks",
 ]
 CRONJOBS = [
-    ("0 10 * * *", "stocks.utils.marketsnapshot.regular_job"),
+    ("0 10 * * *", "stocks.cron.regular_job"),
 ]
 
 MIDDLEWARE = [

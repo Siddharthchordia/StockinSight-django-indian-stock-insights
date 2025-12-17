@@ -44,3 +44,5 @@ ENV/
 # Excel files (assuming these are data/test files)
 *.xlsx
 db1.sqlite3
+
+test_excel_import.py
