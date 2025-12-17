@@ -19,6 +19,8 @@ jobs:
         env:
             DJANGO_SETTINGS_MODULE: stock_tracker.settings
             DATABASE_URL: postgres://stockinsight_user:stockinsight_password@localhost:5432/stockinsight_db
+            SECRET_KEY: ci-dummy-secret-key
+            DJANGO_ALLOWED_HOSTS: "*"
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
