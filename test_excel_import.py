@@ -1,3 +1,9 @@
-from stocks import import_excel
+import yfinance as yf
 
-import_excel.import_financials_from_excel("SBI.xlsx", "SBIN")
+
+symbol = "INFY.NS"
+stock = yf.Ticker(symbol)
+info = stock.info
+
+print(info)
+print(info.get('industry'))

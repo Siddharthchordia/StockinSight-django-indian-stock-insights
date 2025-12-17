@@ -48,7 +48,12 @@ INSTALLED_APPS = [
     "django_htmx",
     "django.contrib.humanize",
     'widget_tweaks',
+    "django_crontab",
+
     "stocks",
+]
+CRONJOBS = [
+    ("0 10 * * *", "stocks.utils.marketsnapshot.regular_job"),
 ]
 
 MIDDLEWARE = [
@@ -121,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-in"
 
 TIME_ZONE = "UTC"
 

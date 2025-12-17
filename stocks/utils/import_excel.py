@@ -8,11 +8,30 @@ from stocks.models import (
     MetricCategory,
     TimePeriod,
     FinancialValue,
+    CompanyHistory
 )
+import yfinance as yf
 
 from stocks.utils.gen_fundamentals import generate_company_fundamentals
 
-
+def get_history(company: Company):
+    symbol = f"{company.ticker}.NS"
+    stock = yf.Ticker(symbol)
+    df = stock.history(start="1900-01-01")
+    records=[]
+    for idx,row in df.iterrows():
+        records.append(
+            CompanyHistory(
+                company=company,
+                date = idx.date(),
+                closing_price=row["Close"],
+                volume = row['Volume']
+            )
+        )
+    CompanyHistory.objects.bulk_create(
+        records,
+        ignore_conflicts=True
+    )
 
 def normalize_code(name: str) -> str:
     return (
@@ -189,3 +208,4 @@ def import_data_sheet(
                     defaults={"value": value},
                 )
     generate_company_fundamentals(company)
+    get_history(company)

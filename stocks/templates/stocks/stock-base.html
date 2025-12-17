@@ -41,9 +41,9 @@
                     
                 </div>
             </div>
-            <div class="text-right mr-10">
+            <div class="text-right">
                 <div class="text-3xl font-bold text-amber-600">
-                    ₹{{ snapshot.price|default:"--" }}
+                    ₹{{ snapshot.price|default:"--"|floatformat:2|intcomma }}
                 </div>
                 <div class="text-sm text-amber-500">
                     Current Price
@@ -54,7 +54,7 @@
         <div>
             <div class="text-slate-500">Revenue</div>
             <div class="font-semibold text-slate-800">
-                ₹{{ fundamentals.revenue|default:"--"|floatformat:0 }}
+                ₹{{ fundamentals.revenue|default:"--"|floatformat:0 |intcomma }} Crs.
             </div>
         </div>
 
@@ -95,7 +95,7 @@
         <div>
             <div class="text-slate-500">Market Cap.</div>
             <div class="font-semibold text-slate-800">
-                {{ snapshot.market_cap | to_crore |default:"--"| floatformat:2 }} Crs.
+                ₹{{ snapshot.market_cap | to_crore |default:"--"| floatformat:2|intcomma }} Crs.
             </div>
         </div>
         <div>
@@ -113,7 +113,7 @@
         <div>
             <div class="text-slate-500">52W High/Low</div>
             <div class="font-semibold text-slate-800">
-                {{ snapshot.high_52w |default:"--"| floatformat:0 }} / {{ snapshot.low_52w |default:"--"| floatformat:0 }}
+                {{ snapshot.high_52w |default:"--"| floatformat:0|intcomma }} / {{ snapshot.low_52w |default:"--"| floatformat:0|intcomma }}
             </div>
         </div>
 

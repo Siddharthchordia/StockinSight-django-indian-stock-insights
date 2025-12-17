@@ -26,3 +26,4 @@ sqlparse==0.5.4
 tablib==3.9.0
 psycopg[binary]
 yfinance==0.2.66
+django-crontab>=0.7.1

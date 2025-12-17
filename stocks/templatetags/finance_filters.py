@@ -5,6 +5,7 @@ register = template.Library()
 @register.filter
 def to_crore(value):
     try:
-        return value / 1e7
-    except:
+        return int(value) / 1e7
+    except Exception as e:
+        print(e)
         return None

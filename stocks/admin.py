@@ -11,10 +11,15 @@ from .models import (
     Metric,
     FinancialValue,
     CompanyFundamental,
-    CompanyMarketSnapshot
+    CompanyMarketSnapshot,
+    CompanyHistory
+
 )
 from .forms import FinancialValueAdminForm, CompanyAdminForm
 from stocks.utils.import_excel import import_data_sheet
+
+
+admin.site.register(CompanyHistory)
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
@@ -42,6 +47,12 @@ class CompanyAdmin(admin.ModelAdmin):
             finally:
                 os.remove(tmp_path)
 
+
+
+
+@admin.register(CompanyMarketSnapshot)
+class CompanyMarketSnapshotAdmin(admin.ModelAdmin):
+    list_display = ["company","price","market_cap","pe","pb"]
 
 
 

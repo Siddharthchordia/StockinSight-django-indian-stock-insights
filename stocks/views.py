@@ -53,7 +53,7 @@ def get_stock(request,ticker):
     pnl_periods, pnl_data = get_table_data('annual', 'PNL')
     bs_periods, bs_data = get_table_data('annual', 'BS')
     cf_periods, cf_data = get_table_data('annual', 'CF')
-    snapshot = get_live_snapshot(company.ticker)
+    snapshot = company.market
     context = {
         'company': company,
         'snapshot':snapshot,

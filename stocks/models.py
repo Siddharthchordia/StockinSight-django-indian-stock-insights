@@ -14,7 +14,6 @@ class Company(models.Model):
     ticker = models.CharField(_("Ticker"), max_length=30, unique=True)
     exchange = models.CharField(_("Exchange"), max_length=3, choices=EXCHANGE_CHOICES)
     sector = models.CharField(_("Sector"), max_length=50)
-    listing_date = models.DateField(_("Listing Date"))
     is_active = models.BooleanField(_("Active?"), default=True)
 
     class Meta:
@@ -183,15 +182,36 @@ class CompanyMarketSnapshot(models.Model):
         related_name="market"
     )
 
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    market_cap = models.DecimalField(max_digits=20, decimal_places=2)
-
-    # Price-derived ratios
+    price = models.DecimalField(_("Price"),max_digits=10, decimal_places=2)
+    market_cap = models.DecimalField(_("Market Cap"),max_digits=20, decimal_places=2, null=True, blank=True)
+    high_52w = models.DecimalField(_("High"),max_digits=10, decimal_places=2, null=True, blank=True)
+    low_52w = models.DecimalField(_("Low"),max_digits=10, decimal_places=2, null=True, blank=True)
     pe = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     pb = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    dividend_yield = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
-
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = _("Market Snapshot")
+        verbose_name_plural = _("Market Snapshots")
 
     def __str__(self):
         return f"{self.company.name} Market Snapshot"
+
+class CompanyHistory(models.Model):
+    company = models.ForeignKey(Company, verbose_name=_("Company"), on_delete=models.CASCADE, related_name="price_history")
+    date = models.DateField(_("Date"), auto_now=False, auto_now_add=False)
+    closing_price = models.DecimalField(_("Closing Price"), max_digits=10, decimal_places=2)
+    volume = models.BigIntegerField(_("Volume"))
+    class Meta:
+        verbose_name = _("CompanyHistory")
+        verbose_name_plural = _("CompanyHistories")
+        ordering = ["-date"]
+        unique_together = ("company", "date")
+        indexes = [
+            models.Index(fields=["company", "date"]),
+        ]
+
+    def __str__(self):
+        return f"{self.company.ticker} | {self.date} | {self.closing_price}"
+
+    def get_absolute_url(self):
+        return reverse("PriceHistory_detail", kwargs={"pk": self.pk})
