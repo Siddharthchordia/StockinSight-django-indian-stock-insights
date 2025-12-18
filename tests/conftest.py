@@ -21,7 +21,7 @@ def other_company(db):
 
 @pytest.fixture
 def metric_category(db):
-    return MetricCategory.objects.create(
+    return MetricCategory.objects.get(
         code="PNL"
     )
 
