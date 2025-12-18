@@ -1,17 +1,20 @@
-
 {% load humanize %}
 {% load finance_filters %}
 {% if table_data %}
-<div class="glass-panel p-6 rounded-2xl">
+<div class="glass-panel p-4 md:p-6 rounded-2xl">
     <h2 class="text-2xl font-semibold mb-6 text-slate-800 border-b border-slate-200 pb-2">
         {{ title }}
     </h2>
 
     <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
+        <table class="w-full text-xs md:text-sm text-left">
+
             <thead>
                 <tr class="text-slate-500 border-b border-slate-200">
-                    <th class="py-3 px-4 font-medium whitespace-nowrap">Metric</th>
+                    <th
+                        class="py-3 px-4 font-medium whitespace-nowrap sticky left-0 z-10 bg-white border-r border-slate-100">
+                        Metric</th>
+
                     {% for period in periods %}
                     <th class="py-3 px-4 font-medium text-right whitespace-nowrap">
                         {{ period }}
@@ -23,15 +26,17 @@
             <tbody class="divide-y divide-slate-200/60">
                 {% for row in table_data %}
                 <tr class="hover:bg-amber-50/40 transition-colors">
-                    <td class="py-3 px-4 font-medium text-slate-700 whitespace-nowrap">
+                    <td
+                        class="py-3 px-4 font-medium text-slate-700 whitespace-nowrap sticky left-0 z-10 bg-white/95 backdrop-blur-sm border-r border-slate-100">
+
                         {{ row.metric }}
                     </td>
                     {% for value in row.values %}
                     <td class="py-3 px-4 text-right text-slate-600 whitespace-nowrap">
                         {% if value %}
-                            {{ value|floatformat:2| indian_comma }}
+                        {{ value|floatformat:2| indian_comma }}
                         {% else %}
-                            --
+                        --
                         {% endif %}
                     </td>
                     {% endfor %}

@@ -59,35 +59,67 @@
     <footer class="mt-20">
         <div class="max-w-screen-xl mx-auto px-6 py-6">
 
-            <div class="flex flex-col items-center text-center gap-1
-                            rounded-2xl
-                            bg-white/60 backdrop-blur-xl
-                            border border-white/70
-                            shadow-sm
-                            p-6">
+            <div class="flex flex-col md:flex-row items-center md:items-center
+                        justify-between gap-6
+                        rounded-2xl
+                        bg-white/60 backdrop-blur-xl
+                        border border-white/70
+                        shadow-sm
+                        p-6">
 
-                <div class="text-lg font-semibold text-slate-900 tracking-tight">
-                    StockinSight
+                <!-- Left Section -->
+                <div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+                    <div class="text-lg font-semibold text-slate-900 tracking-tight">
+                        StockinSight
+                    </div>
+
+                    <div class="text-xs text-slate-500">
+                        Insights, illuminated
+                    </div>
+
+                    <div class="mt-2 text-xs text-slate-400">
+                        StockinSight © {% now "Y" %}
+                    </div>
+
+                    <div class="text-xs text-slate-400">
+                        Made with ❤️ in India
+                    </div>
+
+                    <div class="text-xs text-slate-500">
+                        By Siddharth Chordia
+                    </div>
                 </div>
 
-                <div class="text-xs text-slate-500">
-                    Insights, illuminated
-                </div>
 
-                <div class="mt-2 text-xs text-slate-400">
-                    StockinSight © {% now "Y" %}
-                </div>
-                <div class="mt-2 text-xs text-slate-400">
-                    Made with ❤️ in India
-                </div>
-                <div class="mt-2 text-xs text-slate-500">
-                    By Siddharth Chordia
-                </div>
+            <!-- Right Section (Vertical Socials) -->
+            <div class="flex flex-col items-center md:items-end gap-3 text-sm">
+
+                <a href="https://github.com/siddharthchordia"
+                   target="_blank"
+                   class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition">
+                    GitHub
+                </a>
+
+                <a href="https://linkedin.com/in/siddharthhchordia"
+                   target="_blank"
+                   class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition">
+                    LinkedIn
+                </a>
+
+                <a href="https://instagram.com/siddharthhchordia"
+                   target="_blank"
+                   class="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition">
+                    Instagram
+                </a>
 
             </div>
 
         </div>
-    </footer>
+
+    </div>
+</footer>
+
+
 
 
 

@@ -22,6 +22,7 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+from celery.schedules import crontab
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -48,13 +49,16 @@ INSTALLED_APPS = [
     "django_htmx",
     "django.contrib.humanize",
     'widget_tweaks',
-    "django_crontab",
+    "django_celery_beat",
 
     "stocks",
 ]
-CRONJOBS = [
-    ("0 10 * * *", "stocks.cron.regular_job"),
-]
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -149,3 +153,16 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = 'index'
+
+
+
+CELERY_BEAT_SCHEDULE = {
+    "daily-market-snapshot": {
+        "task": "stocks.tasks.daily_market_snapshot",
+        "schedule": crontab(hour=10, minute=30, day_of_week="1-5"),
+    },
+    "weekly-market-update": {
+        "task": "stocks.tasks.weekly_market_update",
+        "schedule": crontab(hour=0, minute=30, day_of_week="0"),
+    },
+}

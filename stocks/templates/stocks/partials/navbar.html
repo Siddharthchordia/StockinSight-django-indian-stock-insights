@@ -2,11 +2,7 @@
 <nav>
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="{% url 'index' %}" class="flex items-center gap-3">
-            <img
-                class="w-10 h-10"
-                src="{% static 'images/logo2.svg' %}"
-                alt="Lumeo logo"
-            />
+            <img class="w-10 h-10" src="{% static 'images/logo2.svg' %}" alt="Lumeo logo" />
 
             <span class="flex flex-col leading-[1.1]">
                 <span class="text-2xl font-semibold tracking-tight whitespace-nowrap">
@@ -17,12 +13,87 @@
                 </span>
             </span>
         </a>
+
+        {% if request.resolver_match.url_name != 'index' %}
+        <div class="relative flex items-center md:order-2">
+            <!-- Search Toggle Button (Mobile/Desktop) -->
+            <button id="navbar-search-toggle" type="button"
+                class="p-2.5 text-slate-500 rounded-xl hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-colors"
+                aria-label="Toggle search">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+            </button>
+
+            <!-- Search Container (Hidden by default) -->
+            <div id="navbar-search-container"
+                class="hidden absolute right-0 top-full mt-2 w-screen max-w-[calc(100vw-2rem)] md:w-80 px-4 md:px-0 z-50 origin-top-right transition-all duration-200 ease-out">
+                <div class="relative">
+                    <input type="search" name="q"
+                        class="w-full px-5 py-3 text-sm text-slate-800 rounded-2xl border border-white/60 shadow-lg backdrop-blur-xl focus:ring-2 focus:ring-amber-400/50 outline-none transition-all duration-200"
+                        style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));"
+                        placeholder="Search ticker..." autocomplete="off" hx-get="{% url 'stock-autocomplete' %}"
+                        hx-trigger="keyup changed delay:300ms" hx-target="#navbar-autocomplete-results"
+                        hx-swap="innerHTML" />
+                    <!-- Autocomplete Dropdown -->
+                    <div id="navbar-autocomplete-results"
+                        class="absolute z-60 w-full mt-2 bg-white/90 backdrop-blur-xl border border-white/50 rounded-2xl shadow-xl overflow-hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Script for Toggle -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const toggleBtn = document.getElementById('navbar-search-toggle');
+                const container = document.getElementById('navbar-search-container');
+                const input = container.querySelector('input');
+
+                toggleBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const isHidden = container.classList.contains('hidden');
+
+                    if (isHidden) {
+                        // Show
+                        container.classList.remove('hidden');
+                        // Small timeout to allow transition if we add one (currently just unhiding)
+                        setTimeout(() => input.focus(), 50);
+                    } else {
+                        // Hide
+                        container.classList.add('hidden');
+                    }
+                });
+
+                // Close when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!container.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        container.classList.add('hidden');
+                    }
+                });
+
+                // Prevent closing when clicking inside the input
+                container.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            });
+        </script>
+        {% endif %}
     </div>
 
-      {% comment %} <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+    {% comment %} <button data-collapse-toggle="navbar-default" type="button"
+        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        aria-controls="navbar-default" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
-        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-      </button> {% endcomment %}
-      
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"></path>
+        </svg>
+    </button> {% endcomment %}
+
     </div>
-  </nav>
+</nav>
