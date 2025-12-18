@@ -1,13 +1,5 @@
-/* =====================================
-   LUMEO — LIGHT GLASS THEME
-   Tone: Warm, Calm, Premium
-   Inspiration: macOS Light Mode, VisionOS
-===================================== */
 
 
-/* ================================
-   GLOBAL
-================================ */
 
 body {
     background:
@@ -39,9 +31,7 @@ body {
 }
 
 
-/* ================================
-   NAVBAR — LIGHT GLASS
-================================ */
+
 
 nav {
     background:
@@ -68,9 +58,6 @@ nav {
 }
 
 
-/* ================================
-   BRANDING (OPTIONAL)
-================================ */
 
 .brand {
     font-size: 1.25rem;
@@ -85,9 +72,6 @@ nav {
 }
 
 
-/* ================================
-   SEARCH PAGE LAYOUT
-================================ */
 
 .search-page {
     min-height: 100vh;
@@ -97,10 +81,6 @@ nav {
     padding-top: 96px;
 }
 
-
-/* ================================
-   SEARCH CONTAINER — LIQUID GLASS
-================================ */
 
 .search-container {
     width: 100%;
@@ -127,10 +107,6 @@ nav {
         inset 0 -1px 1px rgba(255, 255, 255, 0.4);
 }
 
-
-/* ================================
-   SEARCH INPUT — WARM ILLUMINATION
-================================ */
 
 .search-container input[type="search"] {
     width: 100%;
@@ -174,10 +150,6 @@ nav {
 }
 
 
-/* ================================
-   AUTOCOMPLETE DROPDOWN
-================================ */
-
 #autocomplete-results {
     margin-top: 18px;
 }
@@ -210,10 +182,6 @@ nav {
 }
 
 
-/* ================================
-   AUTOCOMPLETE ITEM
-================================ */
-
 #autocomplete-results li a {
     display: flex;
     justify-content: space-between;
@@ -239,9 +207,6 @@ nav {
 }
 
 
-/* ================================
-   MOBILE
-================================ */
 
 @media (max-width: 640px) {
     .search-container {
