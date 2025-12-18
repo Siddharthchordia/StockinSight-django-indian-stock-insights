@@ -15,7 +15,7 @@ StockInSight is a powerful, comprehensive stock analysis and screening tool desi
 *   **Modern UI/UX**:
     *   **Glassmorphism Design**: sleek, translucent panels with backdrop blur.
     *   **Responsive Layout**: Fully optimized for desktop and mobile devices.
-    *   **Dark-themed Aesthetics**: Built with a polished, professional look using TailwindCSS.
+    *   **Light-themed Aesthetics**: Built with a polished, professional look using TailwindCSS.
 
 ## 🛠 Tech Stack
 
