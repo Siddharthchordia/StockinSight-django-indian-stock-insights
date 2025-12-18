@@ -1,177 +1,140 @@
-# 📈 StockinSight
+# StockInSight - Indian Stock Insights
 
-**Repository**: `Siddharthchordia/StockinSight-django-indian-stock-insights
-**Status**: Public
-**Tech Stack**: Django · PostgreSQL · Docker · Yahoo Finance (yfinance) · HTMX · TailwindCSS
+StockInSight is a powerful, comprehensive stock analysis and screening tool designed for the Indian market (NSE/BSE). It provides deep insights into company financials, historical price data, and key performance metrics, all wrapped in a modern, glassmorphic user interface.
 
----
+## 🚀 Features
 
-## 🚀 Overview
+*   **Comprehensive Financial Analysis**: View detailed Profit & Loss, Balance Sheet, and Cash Flow statements.
+*   **Interactive Visualizations**:
+    *   Dynamic charts for price history and volume.
+    *   Visual representation of financial trends over time.
+    *   Quarterly and Annual data breakdown.
+*   **Real-time Data**: Integration with `yfinance` for daily market snapshots and historical price data.
+*   **Excel Data Import**: Seamlessly import financial data using standard Screener.in Excel exports.
+*   **Advanced Search**: Fast, autocomplete-enabled stock search by ticker or company name.
+*   **Modern UI/UX**:
+    *   **Glassmorphism Design**: sleek, translucent panels with backdrop blur.
+    *   **Responsive Layout**: Fully optimized for desktop and mobile devices.
+    *   **Dark-themed Aesthetics**: Built with a polished, professional look using TailwindCSS.
 
-Stock Market Analysis Tool is a **full‑stack Django application** designed for analyzing Indian stock market companies with a focus on **fundamentals, price history, and daily market snapshots**.
+## 🛠 Tech Stack
 
-The project is inspired by platforms like *Screener.in*, but is built from scratch with:
+### Backend
+*   **Framework**: [Django 5](https://www.djangoproject.com/) (Python 3.12)
+*   **Database**: PostgreSQL
+*   **Task Queue**: Celery with Redis (for background jobs like data fetching)
+*   **Data Analysis**: Pandas, NumPy
+*   **Financial Data**: `yfinance` API
 
-* Structured financial data models
-* Automated background jobs
-* Scalable ingestion pipelines
-* Clean, modern UI
+### Frontend
+*   **Structure**: Django Templates
+*   **Styling**: [TailwindCSS](https://tailwindcss.com/) & [DaisyUI](https://daisyui.com/)
+*   **Interactivity**: [HTMX](https://htmx.org/) (for SPA-like feel without complexity)
+*   **Charts**: Chart.js
 
----
+### DevOps & Infrastructure
+*   **Containerization**: Docker & Docker Compose
 
-## ✨ Key Features
+## ⚡ Setup Guidance
 
-### 📊 Company & Market Data
+### Prerequisites
+*   [Docker](https://www.docker.com/) and Docker Compose installed on your machine.
 
-* Company master data (name, sector, exchange, ticker)
-* Daily market snapshot (price, market cap, PE, PB, 52W high/low)
-* Automatic updates using **Yahoo Finance API**
+### Installation Steps
 
-### 📈 Price History & Charting
+1.  **Clone the Repository**
+    ```bash
+    git clone <repository_url>
+    cd StockinSight
+    ```
 
-* Historical OHLCV storage (`CompanyHistory`)
-* Daily price append at **3:30 PM IST (10:00 AM UTC)**
-* Efficient querying for chart rendering
+2.  **Environment Configuration**
+    Create a `.env` file in the root directory. You can use the following template:
+    ```env
+    # Django Settings
+    SECRET_KEY=your_secret_key_here
+    DEBUG=1
+    ALLOWED_HOSTS=localhost,127.0.0.1
 
-### 📚 Fundamentals Engine
+    # Database Settings
+    POSTGRES_DB=stockinsight_db
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=your_password
+    POSTGRES_HOST=postgres
+    POSTGRES_PORT=5432
 
-* P&L, Balance Sheet, Cash Flow support
-* Quarterly and annual periods
-* Metric‑driven design (EPS, Revenue, EBITDA, etc.)
-* Excel import support (admin‑driven, replaceable later)
+    # Redis Settings
+    REDIS_URL=redis://redis:6379/0
+    ```
 
-### ⏱ Background Jobs & Cron
+3.  **Build and Run**
+    Start the application using Docker Compose:
+    ```bash
+    docker-compose up --build
+    ```
+    This will spin up the web server, PostgreSQL database, Redis, and Celery workers.
 
-* Daily price history update
-* Daily market snapshot refresh
-* Cron‑based execution (UTC aligned)
+4.  **Apply Migrations**
+    Once the containers are running, apply database migrations:
+    ```bash
+    docker-compose exec stockinsightbackend python manage.py makemigrations
+    ```
+    ```bash
+    docker-compose exec stockinsightbackend python manage.py migrate
+    ```
 
-### 🧠 Architecture Highlights
+5.  **Access the Application**
+    Open your browser and navigate to: [http://localhost:8000](http://localhost:8000)
 
-* Normalized financial schema
-* Idempotent data ingestion
-* Optimized Django ORM usage
-* Dockerized for easy deployment
+## 🔐 Superuser Creation
 
----
-
-## 🗂 Project Structure
-
-```text
-.
-├── stock_tracker/      # Django project config
-├── stocks/             # Core app (models, views, utils, cron jobs)
-├── tracker/            # Frontend / UI layer
-├── static/             # Static assets (CSS, JS)
-├── tests/              # Test suite
-├── Dockerfile
-├── docker-compose.yaml
-├── requirements.txt
-├── manage.py
-└── README.md
-```
-
----
-
-## 🐳 Local Setup (Docker)
-
-### 1️⃣ Build containers
-
-```bash
-docker-compose build
-```
-
-### 2️⃣ Start services
-
-```bash
-docker-compose up -d
-```
-
----
-
-## 🧱 Django Setup (First Run)
-
-### 3️⃣ Run migrations
+To access the admin panel, you need to create a superuser account:
 
 ```bash
-docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
+docker-compose exec stockinsightbackend python manage.py createsuperuser
 ```
+Follow the prompts to set a username, email, and password.
 
-### 4️⃣ Create superuser
+## 🏢 Adding Companies
 
+StockInSight uses a hybrid approach to add companies: manual creation coupled with financial data import via Excel.
+
+1.  **Login to Admin Panel**
+    Navigate to [http://localhost:8000/admin](http://localhost:8000/admin) and log in with your superuser credentials.
+
+2.  **Add a Company**
+    *   Go to **Companies** -> **Add company**.
+    *   Enter the essential details:
+        *   **Name**: Company Name
+        *   **Ticker**: Stock Ticker (e.g., RELIANCE, TCS)
+        *   **Exchange**: NSE or BSE
+        *   **Sector**: Sector of Company
+    *   **Upload Financial Data (Crucial Step)**:
+        *   In the **Excel file** field, upload a standard financial export file (compatible with Screener.in format).
+        *   **Required Format**: The Excel file must contain a sheet named `Data Sheet` with sections for "PROFIT & LOSS", "QUARTERS", "BALANCE SHEET", and "CASH FLOW".
+
+3.  **Save**
+    *   Click **Save**.
+    *   **Behind the Scenes**: The system will automatically:
+        *   Save the company record.
+        *   Parse the Excel file to populate comprehensive financial data (metrics, time periods, values).
+        *   Fetch live price snapshots from Yahoo Finance.
+        *   Fetch historical price data.
+        *   Calculate fundamental ratios (Fundamentals).
+
+## 🎛 Management Commands
+
+The project includes custom Django management commands for maintenance and data updates:
+
+*   **`import_financials`**: Manual import financials.
+*   **`generate_fundamentals`**: Recalculate fundamental ratios for companies.
+*   **`get_snapshot`**: Fetch latest market price/snapshot for companies.
+*   **`get_all_histories`**: Fetch complete historical price data for all companies.
+
+Run them via Docker:
 ```bash
-docker-compose exec web python manage.py createsuperuser
+docker-compose exec stockinsightbackend python manage.py <command_name>
 ```
 
 ---
-
-## ⚙️ Initial Admin Configuration (IMPORTANT)
-
-After logging into the Django admin panel:
-
-### 1️⃣ Create **Metric Categories**
-
-Create the following **three MetricCategory entries**:
-
-* `Profit & Loss`
-* `Balance Sheet`
-* `Cash Flow`
-
-These are required before importing any fundamentals data.
-
----
-
-## 🧪 Excel Import (Fundamentals)
-
-* Upload Screener‑style Excel files via Admin Panel
-* System auto‑maps:
-
-  * Metrics
-  * Time periods
-  * Companies
-* Safe re‑runs without duplication
-
-*(This is planned to be replaced with automated ingestion)*
-
----
-
-## ⏰ Cron Jobs
-
-Configured cron jobs handle:
-
-* Daily price history update
-* Daily market snapshot refresh
-
-**Execution Time**:
-
-* **3:30 PM IST / 10:00 AM UTC**
-
-Cron jobs are defined within the Django app and executed via Docker environment.
-
----
-
-## 🛣 Roadmap
-
-* Automated fundamentals ingestion (no Excel)
-* Historical valuation metrics (EPS, PE trends)
-* Advanced charts & indicators
-* Performance optimizations (ORM + SQL)
-* Public API endpoints
-
----
-
-## 👤 Author
-
-**Siddharth Chordia**
-GitHub: [@Siddharthchordia](https://github.com/Siddharthchordia)
-
----
-
-## 📜 License
-
-This project is currently unlicensed. All rights reserved by the author.
-
----
-
-> ⚠️ **Disclaimer**: This project is for educational and research purposes only. It is not financial advice.
+*Built by Siddharth Chordia*
