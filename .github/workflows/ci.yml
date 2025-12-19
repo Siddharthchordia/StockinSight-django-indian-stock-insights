@@ -45,6 +45,7 @@ jobs:
 
       REDIS_HOST: localhost
       REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6390/0
 
       SECRET_KEY: ci-dummy-secret-key
       DJANGO_ALLOWED_HOSTS: "*"
