@@ -31,3 +31,4 @@ yfinance==0.2.66
 celery
 redis
 django-celery-beat
+gunicorn
