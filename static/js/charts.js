@@ -170,6 +170,7 @@ class PriceVolumeChart {
                 tension: 0.05,
                 pointRadius: 0,
                 fill: false,
+                spanGaps: true,
                 order: 2
             });
         }
@@ -252,9 +253,6 @@ class PriceVolumeChart {
     }
 }
 
-/* -------------------------------
-   HTMX + Page Load Init
--------------------------------- */
 
 function initPriceVolumeCharts(root = document) {
     const canvas = root.querySelector('#priceVolumeCanvas');
