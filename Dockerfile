@@ -15,6 +15,15 @@ RUN pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create non-root user
+RUN addgroup --system django && adduser --system --ingroup django django
+
+# Copy project files
 COPY . .
+
+# Create static directory (important for collectstatic)
+RUN mkdir -p /app/staticfiles && chown -R django:django /app
+
+USER django
 
 EXPOSE 8000

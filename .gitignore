@@ -56,3 +56,4 @@ db1.sqlite3
 
 # Folders
 dummy/
+.env.prod
