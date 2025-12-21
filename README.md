@@ -1,6 +1,6 @@
-# StockInSight - Indian Stock Insights
+# StockInSight™ - Indian Stock Insights
 
-StockInSight is a powerful, comprehensive stock analysis and screening tool designed for the Indian market (NSE/BSE). It provides deep insights into company financials, historical price data, and key performance metrics, all wrapped in a modern, glassmorphic user interface.
+StockInSight™ is a powerful, comprehensive stock analysis and screening tool designed for the Indian market (NSE/BSE). It provides deep insights into company financials, historical price data, and key performance metrics, all wrapped in a modern, glassmorphic user interface.
 
 ## 🚀 Features
 
@@ -45,7 +45,7 @@ StockInSight is a powerful, comprehensive stock analysis and screening tool desi
 1.  **Clone the Repository**
     ```bash
     git clone <repository_url>
-    cd StockinSight
+    cd StockInSight™
     ```
 
 2.  **Environment Configuration**
@@ -77,10 +77,10 @@ StockInSight is a powerful, comprehensive stock analysis and screening tool desi
 4.  **Apply Migrations**
     Once the containers are running, apply database migrations:
     ```bash
-    docker-compose exec stockinsightbackend python manage.py makemigrations
+    docker-compose exec StockInSight™backend python manage.py makemigrations
     ```
     ```bash
-    docker-compose exec stockinsightbackend python manage.py migrate
+    docker-compose exec StockInSight™backend python manage.py migrate
     ```
 
 5.  **Access the Application**
@@ -91,13 +91,13 @@ StockInSight is a powerful, comprehensive stock analysis and screening tool desi
 To access the admin panel, you need to create a superuser account:
 
 ```bash
-docker-compose exec stockinsightbackend python manage.py createsuperuser
+docker-compose exec StockInSight™backend python manage.py createsuperuser
 ```
 Follow the prompts to set a username, email, and password.
 
 ## 🏢 Adding Companies
 
-StockInSight uses a hybrid approach to add companies: manual creation coupled with financial data import via Excel.
+StockInSight™ uses a hybrid approach to add companies: manual creation coupled with financial data import via Excel.
 
 1.  **Login to Admin Panel**
     Navigate to [http://localhost:8000/admin](http://localhost:8000/admin) and log in with your superuser credentials.
@@ -133,7 +133,7 @@ The project includes custom Django management commands for maintenance and data 
 
 Run them via Docker:
 ```bash
-docker-compose exec stockinsightbackend python manage.py <command_name>
+docker-compose exec StockInSight™backend python manage.py <command_name>
 ```
 
 ---
